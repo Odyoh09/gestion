@@ -19,14 +19,11 @@ st.title("Gestion des Etudiants")
 
 @st.cache_resource
 def init_conn():
-    MONGO_URI = st.secrets.get("MONGO_URI") or os.getenv("MONGO_URI")
-    if not MONGO_URI:
-        return None
-    client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
+    MONGO_URI = st.secrets.get("MONGO_URI") or os.getenv("MONGO_URI") or "mongodb://localhost:27017"
     try:
-        col = client["gestion_etudiants"]["students"]
-        col.count_documents({})
-        return col
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+        client.admin.command("ping")
+        return client["gestion_etudiants"]["students"]
     except Exception:
         return None
 
@@ -35,10 +32,9 @@ col = init_conn()
 if col is None:
     st.error("Connexion MongoDB impossible.\n\n"
              "Verifie que :\n"
-             "1. Dans Streamlit Cloud > Settings > Secrets :\n"
-             '   MONGO_URI = "mongodb+srv://user:pass@cluster.mongodb.net/"\n'
+             "1. L'URI dans Streamlit Cloud (Settings > Secrets) est correct\n"
              "2. MongoDB Atlas > Network Access > 0.0.0.0/0 est autorise\n"
-             "3. Database Access > l'utilisateur a readWrite sur la base")
+             "3. Database Access > l'utilisateur a les droits sur la base")
     st.stop()
 
 CLASSES = ["L1", "L2", "L3", "M1", "M2", "Doctorat"]
