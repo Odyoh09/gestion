@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Recherche{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Rechercher</h1>
+</div>
+
+<form method="GET" action="{{ url_for('rechercher') }}" class="search-form">
+  <select name="champ">
+    <option value="nom" {% if champ == 'nom' %}selected{% endif %}>Nom</option>
+    <option value="prenom" {% if champ == 'prenom' %}selected{% endif %}>Prénom</option>
+    <option value="email" {% if champ == 'email' %}selected{% endif %}>Email</option>
+    <option value="filiere" {% if champ == 'filiere' %}selected{% endif %}>Filière</option>
+    <option value="numero_etudiant" {% if champ == 'numero_etudiant' %}selected{% endif %}>N°</option>
+  </select>
+  <input type="text" name="q" placeholder="Rechercher..." value="{{ q }}">
+  <button type="submit" class="btn btn-primary">OK</button>
+</form>
+
+{% if q %}
+<div class="card">
+  <div class="card-body">
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">{{ resultats|length }} résultat(s)</p>
+    {% if resultats %}
+    <table>
+      <thead>
+        <tr>
+          <th>N°</th><th>Nom</th><th>Prénom</th><th>Âge</th><th>Email</th><th>Filière</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in resultats %}
+        <tr>
+          <td><strong>{{ e.numero_etudiant }}</strong></td>
+          <td>{{ e.nom }}</td>
+          <td>{{ e.prenom }}</td>
+          <td>{{ e.age }}</td>
+          <td>{{ e.email }}</td>
+          <td><span class="badge">{{ e.filiere }}</span></td>
+          <td>
+            <a href="{{ url_for('modifier', numero_etudiant=e.numero_etudiant) }}" class="btn btn-outline btn-sm">Modifier</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p style="color:var(--text-dim);">Aucun résultat</p>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

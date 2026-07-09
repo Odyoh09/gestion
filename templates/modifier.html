@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Modifier{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Modifier {{ etudiant.nom }} {{ etudiant.prenom }}</h1>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" name="nom" class="form-control" value="{{ etudiant.nom }}">
+        </div>
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" name="prenom" class="form-control" value="{{ etudiant.prenom }}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Âge</label>
+          <input type="number" name="age" class="form-control" value="{{ etudiant.age }}" min="16" max="99">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" class="form-control" value="{{ etudiant.email }}">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Filière</label>
+        <input type="text" name="filiere" class="form-control" value="{{ etudiant.filiere }}">
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ url_for('lister') }}" class="btn btn-outline">Annuler</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
